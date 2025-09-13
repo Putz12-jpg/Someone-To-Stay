@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bucin Bgts Gila</title>
+<style>
+  body {
+    margin: 0;
+    background: #000;
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    position: relative;
+  }
+
+  h1 {
+    position: absolute;
+    top: 40%;
+    color: white;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    z-index: 5;
+    display: none; /* tampil setelah lanjut */
+  }
+
+  /* Loading screen */
+  #loading-screen {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: #000; /* hitam biar nyatu */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 1s ease;
+    font-family: Arial, sans-serif; /* sama kayak halaman 2 */
+  }
+
+  #loading-text {
+    font-size: 28px;
+    margin-bottom: 20px;
+    white-space: nowrap;
+    border-right: 2px solid #ff66b2;
+    width: fit-content;
+    overflow: hidden;
+    color: white; /* ✅ warna putih */
+  }
+
+  /* Tombol lanjut */
+  #loading-screen button {
+    background: #ff66b2;
+    color: white;
+    border: none;
+    padding: 12px 26px;
+    border-radius: 12px;
+    font-size: 18px;
+    cursor: pointer;
+    font-weight: bold;
+    opacity: 0; /* muncul setelah teks selesai */
+    transition: opacity 0.5s ease, transform 0.2s ease;
+  }
+
+  #loading-screen button:hover {
+    transform: scale(1.05);
+  }
+
+  /* Floating hearts */
+  .heart {
+    position: absolute;
+    bottom: -40px;
+    width: 20px;
+    height: 20px;
+    background: pink;
+    transform: rotate(-45deg);
+    animation: rise 6s linear forwards;
+    opacity: 0.9;
+  }
+
+  .heart::before,
+  .heart::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: inherit;
+    border-radius: 50%;
+  }
+
+  .heart::before { top: -10px; left: 0; }
+  .heart::after { left: 10px; top: 0; }
+
+  @keyframes rise {
+    0% { transform: translateY(0) rotate(-45deg) scale(0.8); opacity: 1; }
+    100% { transform: translateY(-110vh) rotate(-45deg) scale(1); opacity: 0; }
+  }
+
+  /* Popup Name */
+  .popup-name {
+    position: absolute;
+    font-size: 18px;
+    color: #ff66b2;
+    font-weight: bold;
+    opacity: 0;
+    animation: popup 2s ease forwards;
+    pointer-events: none;
+  }
+
+  @keyframes popup {
+    0% { transform: scale(0.5); opacity: 0; }
+    30% { transform: scale(1.2); opacity: 1; }
+    70% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(0.5); opacity: 0; }
+  }
+
+  /* Firework hearts */
+  .firework {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background: pink;
+    transform: rotate(-45deg);
+    opacity: 0.9;
+    animation: explode 1s ease-out forwards;
+  }
+
+  .firework::before,
+  .firework::after {
+    content: "";
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background: inherit;
+    border-radius: 50%;
+  }
+
+  .firework::before { top: -7px; left: 0; }
+  .firework::after { top: 0; left: 7px; }
+
+  @keyframes explode {
+    0% { transform: translate(0,0) scale(0.5); opacity: 1; }
+    100% { transform: translate(var(--x), var(--y)) scale(1); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+  <!-- Loading screen -->
+  <div id="loading-screen">
+    <div id="loading-text"></div>
+    <button id="lanjut-btn">Lanjut</button>
+  </div>
+
+  <h1>i love you more than words, I may seem indifferent, but just so you know, you're the only one I want.</h1>
+
+  <!-- 🎶 Musik -->
+  <audio id="bg-music" loop>
+    <source src="https://rolling-coffee-vbm4a8cqgm.edgeone.app/9d8961cf8662.mp3" type="audio/mpeg">
+    Browser kamu tidak mendukung audio.
+  </audio>
+
+  <script>
+    const popupName = "i love you forever <3"; 
+    const music = document.getElementById("bg-music");
+    const loadingScreen = document.getElementById("loading-screen");
+    const lanjutBtn = document.getElementById("lanjut-btn");
+    const mainText = document.querySelector("h1");
+    const loadingText = document.getElementById("loading-text");
+
+    let effectsStarted = false;
+
+    // Typewriter effect
+    function typeWriter(text, element, speed, callback) {
+      let i = 0;
+      function typing() {
+        if (i < text.length) {
+          element.textContent += text.charAt(i);
+          i++;
+          setTimeout(typing, speed);
+        } else {
+          element.style.borderRight = "none"; 
+          if (callback) callback();
+        }
+      }
+      typing();
+    }
+
+    // Mulai ketik
+    window.addEventListener("load", () => {
+      const text = "Hallo Babe? Push In Here Babe<3";
+      loadingText.textContent = ""; 
+      typeWriter(text, loadingText, 120, () => {
+        lanjutBtn.style.opacity = "1"; // tampilkan tombol setelah selesai ketik
+      });
+    });
+
+    // Klik lanjut
+    lanjutBtn.addEventListener("click", () => {
+      loadingScreen.style.opacity = "0";
+      setTimeout(() => loadingScreen.remove(), 1000);
+
+      mainText.style.display = "block";
+      music.play(); 
+      startEffects();
+    });
+
+    // Fungsi mulai efek
+    function startEffects() {
+      if (effectsStarted) return;
+      effectsStarted = true;
+      setInterval(createHeart, 150);
+      setInterval(createPopupNames, 3000);
+      document.body.addEventListener("click", (e) => {
+        firework(e.clientX, e.clientY);
+      });
+    }
+
+    // Floating hearts
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.style.left = Math.random() * 100 + "vw";
+      const colors = ["#ff99cc", "#ff66b2", "#ff4da6", "#ff80bf"];
+      heart.style.background = colors[Math.floor(Math.random() * colors.length)];
+      const size = 14 + Math.random() * 14;
+      heart.style.width = size + "px";
+      heart.style.height = size + "px";
+      heart.style.animationDuration = 4 + Math.random() * 3 + "s";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 7000);
+    }
+
+    // Popup names
+    function createPopupNames() {
+      for (let i = 0; i < 5; i++) {
+        const name = document.createElement("div");
+        name.className = "popup-name";
+        name.innerText = popupName;
+        name.style.left = (10 + Math.random() * 80) + "vw";
+        name.style.top = (10 + Math.random() * 70) + "vh";
+        document.body.appendChild(name);
+        setTimeout(() => name.remove(), 3000);
+      }
+    }
+
+    // Firework hearts
+    function firework(x, y) {
+      for (let i = 0; i < 12; i++) {
+        const fw = document.createElement("div");
+        fw.className = "firework";
+        fw.style.left = x + "px";
+        fw.style.top = y + "px";
+        const angle = (i / 12) * (2 * Math.PI);
+        const dist = 80 + Math.random() * 40;
+        const dx = Math.cos(angle) * dist + "px";
+        const dy = Math.sin(angle) * dist + "px";
+        fw.style.setProperty("--x", dx);
+        fw.style.setProperty("--y", dy);
+        const colors = ["#ff99cc", "#ff66b2", "#ff4da6", "#ff80bf"];
+        fw.style.background = colors[Math.floor(Math.random() * colors.length)];
+        document.body.appendChild(fw);
+        setTimeout(() => fw.remove(), 1000);
+      }
+    }
+  </script>
+</body>
+  </html>
